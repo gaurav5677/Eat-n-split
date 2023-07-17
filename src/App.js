@@ -18,3 +18,49 @@ const initialFriends = [
     balance: 0,
   },
 ];
+
+export default function App() {
+  return (
+    <div className="app">
+      <div className="sidebar">
+        <FrinedList />
+      </div>
+    </div>
+  );
+}
+
+function FrinedList() {
+  const friends = initialFriends;
+
+  return (
+    <ul>
+      {friends.map((friend) => (
+        <Friend friend={friend} key={friend.id} />
+      ))}
+    </ul>
+  );
+}
+
+function Friend({ friend }) {
+  return (
+    <li>
+      <img src={friend.image} alt={friend.name} />
+      <h3>{friend.name}</h3>
+
+      {/* here i use && operator for conditional rendering cause this cases are mutually exclusive , its easier to have three time &&  */}
+      {friend.balance < 0 && (
+        <p className="red">
+          You own {friend.name} ${Math.abs(friend.balance)}
+        </p>
+      )}
+      {friend.balance > 0 && (
+        <p className="green">
+          {friend.name} owes you ${Math.abs(friend.balance)}
+        </p>
+      )}
+      {friend.balance === 0 && <p>You and {friend.name} are even </p>}
+
+      <button className="button">select</button>
+    </li>
+  );
+}
