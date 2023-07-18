@@ -226,3 +226,4 @@ function FormSplitBills({ selectedFriend, onSplitBill }) {
     </form>
   );
 }
+//Project is Feature packed , post issue if there are any 😊
