@@ -44,8 +44,9 @@ export default function App() {
   //  this handleSelection function should receive a friend object
   function handleSelection(friend) {
     // setSelectedFriend(friend);
-    setSelectedFriend((currentSelect) =>
-      currentSelect?.id === friend.id ? null : friend
+    setSelectedFriend(
+      (currentSelect) => (currentSelect?.id === friend.id ? null : friend)
+      // implemented optional chaining (currentSelect?.id)
     );
 
     setShowAddFriend(false);
@@ -85,6 +86,8 @@ function FrinedList({ friends, onSelection, selectedFriend }) {
 
 function Friend({ friend, onSelection, selectedFriend }) {
   const isSelected = selectedFriend?.id === friend.id;
+  // implemented optional chaining (selectedFriend?.id)
+
   return (
     <li className={isSelected ? "selected" : ""}>
       {/* for nice background color after selecting  a firend  */}
@@ -155,19 +158,42 @@ function FormAddFriend({ onAddFriend }) {
 }
 
 function FormSplitBills({ selectedFriend }) {
+  const [bill, setBill] = useState("");
+  const [paidByUser, setPaidByUser] = useState("");
+  const paidByFriend = bill ? bill - paidByUser : " ";
+  const [whoIsPaying, setWhoIsPaying] = useState("user");
+
   return (
     <form className="form-split-bill">
       <h2> Split a bill with {selectedFriend.name}</h2>
 
       <label> 💰 Bill Value</label>
-      <input type="text" />
+      <input
+        type="text"
+        value={bill}
+        onChange={(e) => setBill(Number(e.target.value))}
+      />
+
       <label> 🕴️Your Expences</label>
-      <input type="text" />
+      <input
+        type="text"
+        value={paidByUser}
+        onChange={(e) =>
+          setPaidByUser(
+            Number(e.target.value) > bill ? paidByUser : Number(e.target.value)
+            // Bug solved  , Your expence should not be greater than total bill ⬆️
+          )
+        }
+      />
+
       <label>🧑‍🤝‍🧑 {selectedFriend.name}'s Expences </label>
-      <input type="text" />
+      <input type="text" disabled value={paidByFriend} />
 
       <label> 💳 Who is paying the Bill</label>
-      <select>
+      <select
+        value={whoIsPaying}
+        onChange={(e) => setWhoIsPaying(e.target.value)}
+      >
         <option value="user">You</option>
         <option value="friend">{selectedFriend.name}</option>
       </select>
