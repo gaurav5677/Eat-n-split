@@ -43,7 +43,12 @@ export default function App() {
 
   //  this handleSelection function should receive a friend object
   function handleSelection(friend) {
-    setSelectedFriend(friend);
+    // setSelectedFriend(friend);
+    setSelectedFriend((currentSelect) =>
+      currentSelect?.id === friend.id ? null : friend
+    );
+
+    setShowAddFriend(false);
   }
   return (
     <div className="app">
@@ -79,7 +84,7 @@ function FrinedList({ friends, onSelection, selectedFriend }) {
 }
 
 function Friend({ friend, onSelection, selectedFriend }) {
-  const isSelected = selectedFriend.id === friend.id;
+  const isSelected = selectedFriend?.id === friend.id;
   return (
     <li className={isSelected ? "selected" : ""}>
       {/* for nice background color after selecting  a firend  */}
@@ -101,7 +106,9 @@ function Friend({ friend, onSelection, selectedFriend }) {
       {friend.balance === 0 && <p>You and {friend.name} are even </p>}
 
       {/* so We want to call onSelection and pass in the current friend */}
-      <Button onClick={() => onSelection(friend)}>Select</Button>
+      <Button onClick={() => onSelection(friend)}>
+        {isSelected ? "Close" : "Select"}
+      </Button>
     </li>
   );
 }
